@@ -1,6 +1,5 @@
 import weaviate, { WeaviateClient, vectorizer } from 'weaviate-client';
 
-// Replace these values with your actual credentials
 const wcdUrl = process.env.WEAVIATE_URL as string;
 const wcdApiKey = process.env.WEAVIATE_API_KEY as string;
 const openAIKey = process.env.OPENAI_API_KEY as string;
@@ -22,7 +21,6 @@ export const initializeClient = async () => {
   return client;
 };
 
-// Create the 'Question' collection with explicit vectorizer setup
 export const createCollection = async () => {
   if (!client) await initializeClient();
 
@@ -37,6 +35,14 @@ export const createCollection = async () => {
         name: 'description',
         dataType: 'text' as const,
       },
+      {
+        name: 'upvotes',
+        dataType: 'int' as const,
+      },
+      {
+        name: 'downvotes',
+        dataType: 'int' as const,
+      },
     ],
     vectorizers: [
       vectorizer.text2VecOpenAI({
@@ -48,7 +54,6 @@ export const createCollection = async () => {
     ],
   });
 };
-
 
 export const importData = async () => {
   if (!client) await initializeClient();
