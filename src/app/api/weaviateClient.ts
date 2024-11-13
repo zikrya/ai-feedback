@@ -1,3 +1,4 @@
+import axios from 'axios';
 import weaviate, { WeaviateClient, vectorizer } from 'weaviate-client';
 
 const wcdUrl = process.env.WEAVIATE_URL as string;
@@ -21,6 +22,7 @@ export const initializeClient = async () => {
   return client;
 };
 
+// Create the 'Question' collection
 export const createCollection = async () => {
   if (!client) await initializeClient();
 
@@ -55,6 +57,7 @@ export const createCollection = async () => {
   });
 };
 
+// Import sample data
 export const importData = async () => {
   if (!client) await initializeClient();
   const questions = client!.collections.get('Question');
@@ -67,9 +70,43 @@ export const importData = async () => {
   console.log('Insertion response: ', result);
 };
 
-export const semanticSearch = async (query: string, limit: number = 2) => {
+// Semantic search function
+export const semanticSearch = async (query: string, limit: number = 5) => {
   if (!client) await initializeClient();
-  const questions = client!.collections.get('Question');
-  const result = await questions.query.nearText(query, { limit });
-  return result.objects.map((item) => item.properties);
+
+  try {
+    const response = await axios.post(
+      `${wcdUrl}/v1/graphql`,
+      {
+        query: `
+          {
+            Get {
+              Question(
+                nearText: {
+                  concepts: ["${query}"]
+                }
+                limit: ${limit}
+              ) {
+                title
+                description
+              }
+            }
+          }
+        `,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${wcdApiKey}`,
+          'X-OpenAI-Api-Key': openAIKey,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Semantic search result:', response.data);
+    return response.data.data.Get.Question || [];
+  } catch (error) {
+    console.error("Error in semanticSearch:", error);
+    throw error;
+  }
 };
