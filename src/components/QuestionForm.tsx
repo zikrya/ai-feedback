@@ -1,9 +1,11 @@
+// src/components/QuestionForm.tsx
 'use client'
 import { useState } from 'react';
 
 const QuestionForm = () => {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState<string | null>(null);
+  const [answerId, setAnswerId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,39 +19,64 @@ const QuestionForm = () => {
       });
       const data = await res.json();
       setResponse(data.answer || 'No response found.');
+      setAnswerId(data.answerId); // Store the answer ID for feedback
     } catch (error) {
       console.error('Error fetching response:', error);
       setResponse('An error occurred while fetching the response.');
     }
   };
 
+  const handleFeedback = async (type: 'upvote' | 'downvote') => {
+    if (!answerId) {
+      console.error("No answer ID available for feedback submission.");
+      return;
+    }
+
+    console.log(`Submitting feedback: ${type} for answerId: ${answerId}`); // Log feedback action
+    try {
+      const res = await fetch('/api/submit-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answerId, type }),
+      });
+
+      const data = await res.json();
+      console.log("Feedback submission response:", data); // Log API response
+    } catch (error) {
+      console.error(`Error submitting feedback: ${type}`, error);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center space-y-4 p-4 max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="flex space-x-2 w-full">
+    <div className="p-4 bg-background text-foreground">
+      <form onSubmit={handleSubmit} className="flex flex-col items-start">
         <input
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask a question..."
-          className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+          className="p-2 mb-2 border rounded w-full"
         />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-        >
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Ask
         </button>
       </form>
-
       {response && (
-        <div className="flex flex-col space-y-2 w-full">
-          <div className="self-end bg-gray-200 p-3 rounded-lg shadow-md">
-            <p className="text-gray-800 font-semibold">You:</p>
-            <p>{question}</p>
-          </div>
-          <div className="self-start bg-blue-100 p-3 rounded-lg shadow-md animate-fade-in">
-            <p className="text-gray-800 font-semibold">Answer:</p>
-            <p>{response}</p>
+        <div className="mt-4 p-4 bg-white text-black rounded shadow animate-fade-in">
+          <p>{response}</p>
+          <div className="flex gap-4 mt-2">
+            <button
+              onClick={() => handleFeedback('upvote')}
+              className="px-2 py-1 bg-green-500 text-white rounded"
+            >
+              👍 Upvote
+            </button>
+            <button
+              onClick={() => handleFeedback('downvote')}
+              className="px-2 py-1 bg-red-500 text-white rounded"
+            >
+              👎 Downvote
+            </button>
           </div>
         </div>
       )}
@@ -58,3 +85,4 @@ const QuestionForm = () => {
 };
 
 export default QuestionForm;
+
