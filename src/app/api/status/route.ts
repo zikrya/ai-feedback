@@ -6,7 +6,7 @@ export const GET = async () => {
     const isReady = await checkClusterStatus();
     return NextResponse.json({ status: isReady ? 'Connected' : 'Not Connected' });
   } catch (error) {
-    console.error('Error connecting to Weaviate:', error);
+    console.error('Error checking cluster status:', error);
     return NextResponse.json({ status: 'Error', error: error.message });
   }
 };
