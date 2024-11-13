@@ -63,9 +63,68 @@ export const importData = async () => {
   if (!client) await initializeClient();
   const questions = client!.collections.get('Question');
   const data = [
-    { title: "What is the capital of France?", description: "The capital of France is Paris." },
-    { title: "Who wrote 'To Kill a Mockingbird'?", description: "Harper Lee wrote 'To Kill a Mockingbird'." },
+    {
+      title: "What is JavaScript?",
+      description: "JavaScript is a versatile programming language primarily used for web development to create interactive elements on websites."
+    },
+    {
+      title: "What is the difference between '==' and '===' in JavaScript?",
+      description: "'==' checks for equality after type conversion, while '===' checks for equality without type conversion, making it a stricter comparison."
+    },
+    {
+      title: "What is a closure in JavaScript?",
+      description: "A closure is a feature where an inner function has access to variables from an outer function's scope, even after the outer function has returned."
+    },
+    {
+      title: "How do you create a promise in JavaScript?",
+      description: "A promise is created using the 'new Promise' constructor, which takes a function with 'resolve' and 'reject' parameters to handle asynchronous operations."
+    },
+    {
+      title: "What are arrow functions in JavaScript?",
+      description: "Arrow functions provide a shorter syntax for functions and do not have their own 'this' context, making them useful for concise function expressions."
+    },
+    {
+      title: "What is the 'this' keyword in JavaScript?",
+      description: "'this' refers to the context in which a function is invoked and can change based on how the function is called."
+    },
+    {
+      title: "How can you prevent default behavior in JavaScript?",
+      description: "You can use the 'event.preventDefault()' method in an event handler to prevent the default behavior associated with the event."
+    },
+    {
+      title: "What is the DOM in JavaScript?",
+      description: "The DOM (Document Object Model) is an interface that represents the structure of an HTML document and allows JavaScript to interact with and manipulate HTML elements."
+    },
+    {
+      title: "What is the difference between 'let', 'const', and 'var' in JavaScript?",
+      description: "'var' is function-scoped, 'let' and 'const' are block-scoped, and 'const' variables cannot be reassigned after initialization."
+    },
+    {
+      title: "How do you handle errors in JavaScript?",
+      description: "Errors are handled using try-catch blocks, where 'try' contains the code that may throw an error, and 'catch' contains the code to handle the error."
+    },
+    {
+      title: "What is the purpose of async/await in JavaScript?",
+      description: "async/await is a syntax for writing asynchronous code in a synchronous manner, making it easier to read and handle promises without nested 'then' calls."
+    },
+    {
+      title: "What is JSON and how is it used in JavaScript?",
+      description: "JSON (JavaScript Object Notation) is a lightweight data-interchange format that is easy for humans to read and write. In JavaScript, it's used to parse and stringify data for storage or API communication."
+    },
+    {
+      title: "What is event delegation in JavaScript?",
+      description: "Event delegation is a technique where a single event listener is added to a parent element to handle events for multiple child elements, improving performance."
+    },
+    {
+      title: "How can you debounce a function in JavaScript?",
+      description: "Debouncing limits the rate at which a function executes. It's typically implemented with setTimeout and clearTimeout to delay function calls."
+    },
+    {
+      title: "What is local storage in JavaScript?",
+      description: "Local storage is a web storage API that allows developers to store data in the browser persistently with no expiration, accessible via 'localStorage'."
+    },
   ];
+
 
   try {
     const result = await questions.data.insertMany(data);
