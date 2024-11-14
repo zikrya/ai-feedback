@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'], // Add Poppins as the default sans-serif font
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
       },
@@ -25,4 +28,3 @@ export default {
   },
   plugins: [],
 } satisfies Config;
-

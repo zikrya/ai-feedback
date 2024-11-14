@@ -88,7 +88,7 @@ export default function QuestionForm() {
             exit={{ opacity: 0, y: -20 }}
             className="w-full max-w-2xl md:max-w-3xl bg-white dark:bg-gray-800 shadow-lg p-8 rounded-lg text-center"
           >
-            <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Lord Ruler of JS</h1>
+            <h1 className="text-3xl font-black tracking-wide font-sans text-gray-500 dark:text-gray-200 mb-4">Lord Ruler of JS</h1>
             <form onSubmit={handleSubmit} className="flex items-center space-x-2">
               <Input
                 type="text"
